@@ -164,11 +164,17 @@ class Collection:
     def _shift(
         self, old: Branch, new: Branch, /, *, replace: bool = True
     ) -> None:
-        if new not in self.items:
+        if not self.contains(new):
             self.items.append(new)
 
         if replace:
             old.replaced_by.append(new)
+
+    def contains(self, branch: Branch) -> bool:
+        for item in self.items:
+            if item.uuid == branch.uuid:
+                return True
+        return False
 
     def explain(self) -> None:
         span = timedelta()

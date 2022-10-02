@@ -1,0 +1,8 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+combine_as_imports=true
+line_length = 79

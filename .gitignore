@@ -1,0 +1,10 @@
+dist
+build
+venv
+*.egg-info/
+
+.mypy_cache
+.idea
+.tox
+__pycache__/
+.DS_Store

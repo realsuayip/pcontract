@@ -103,6 +103,16 @@ class Collection:
     def __getitem__(self, item: int) -> Branch:
         return self.items[item]
 
+    @classmethod
+    def init(
+        cls,
+        start_at: datetime | None,
+        end_at: datetime,
+        data: dict,
+    ) -> Collection:
+        initial_branch = Branch(start_at=start_at, end_at=end_at, data=data)
+        return cls(items=[initial_branch])
+
     def branch(
         self,
         data: dict,

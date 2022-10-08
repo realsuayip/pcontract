@@ -1,14 +1,12 @@
 # pcontract
 
-*WIP*
-
 A data structure to track data over time. It works by tracking time/schedule
 information **rather than tracking data changes** over time.
 
 
 ## Reasoning
 
-Let's assume you make a contract with a person (in this example, 
+Let's assume you make a contract with a person (in this example,
 assume it's a lease agreement). In the first draft, the  parties agree on
 some conditions, and if they are happy, they close the deal.
 

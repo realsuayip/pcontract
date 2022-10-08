@@ -6,7 +6,7 @@ import zoneinfo
 from datetime import datetime, timedelta
 from typing import Type, cast
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 __all__ = ["Branch", "Collection"]
 
 

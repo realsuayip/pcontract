@@ -119,7 +119,7 @@ class Collection:
         *,
         start_at: datetime,
         end_at: datetime | None = None,
-    ) -> None:
+    ) -> Branch:
         start_at, end_at = validate_tz(start_at, end_at)
         items: list[Branch] = [
             item for item in self.items if not item.replaced_by
@@ -170,6 +170,7 @@ class Collection:
                     start_at=end_at, end_at=item.end_at, data=item.data
                 )
                 self._shift(item, right)
+        return branch
 
     def _shift(
         self, old: Branch, new: Branch, /, *, replace: bool = True

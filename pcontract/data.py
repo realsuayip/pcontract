@@ -93,6 +93,7 @@ class Collection:
     ) -> None:
         self.items: list[Branch] = items
         self.klass: Type[Branch] = klass
+        self.uuid: str = uuid.uuid4().hex
 
     def __repr__(self) -> str:
         return "<%s %s>" % (self.__class__.__name__, repr(self.items))

@@ -126,7 +126,6 @@ class Collection:
             item for item in self.items if not item.replaced_by
         ]
 
-        # fixme which branch to choose max_end from? maybe longest span?
         max_end: datetime = max(cast(datetime, item.end_at) for item in items)
 
         if start_at > max_end:

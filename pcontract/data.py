@@ -153,8 +153,6 @@ class Collection:
             if not (overlap or is_extension):
                 continue
 
-            self._shift(item, branch, replace=not is_extension)
-
             ldelta = max(zero, start_at - item.start_at)
             rdelta = max(zero, item.end_at - end_at)
 
@@ -165,6 +163,8 @@ class Collection:
                     data=item.data,
                 )
                 self._shift(item, left)
+
+            self._shift(item, branch, replace=not is_extension)
 
             if rdelta:
                 right = self.klass(

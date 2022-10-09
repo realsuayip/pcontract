@@ -59,7 +59,7 @@ class TestCollection(unittest.TestCase):
             start_at=self.start + datetime.timedelta(days=45),
             data={"key": "venus"},
         )
-        initial_branch, main_branch, left_branch = collection
+        initial_branch, left_branch, main_branch = collection
         self.assertEqual(3, len(collection))
 
         self.assertIn(left_branch, initial_branch.replaced_by)
@@ -115,7 +115,7 @@ class TestCollection(unittest.TestCase):
             end_at=self.start + datetime.timedelta(days=45),
             data={"key": "venus"},
         )
-        initial_branch, main_branch, left_branch, right_branch = collection
+        initial_branch, left_branch, main_branch, right_branch = collection
         self.assertEqual(4, len(collection))
 
         self.assertIn(left_branch, initial_branch.replaced_by)
@@ -172,7 +172,7 @@ class TestCollection(unittest.TestCase):
             data={"key": "venus"},
         )
 
-        i, m1, l1, m2, l2 = collection
+        i, l1, m1, l2, m2 = collection
         self.assertEqual(5, len(collection))
         self.assertEqual(datetime.timedelta(days=364), m1.span)
         self.assertEqual(datetime.timedelta(days=1), l1.span)

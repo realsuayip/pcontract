@@ -127,16 +127,21 @@ class Collection:
         ]
 
         max_end: datetime = max(cast(datetime, item.end_at) for item in items)
+        min_start: datetime = min(
+            cast(datetime, item.start_at) for item in items
+        )
 
-        if start_at > max_end:
+        if (start_at > max_end) or (start_at < min_start):
             raise ValueError(
-                "Starting date (%s) is out of the boundary." % start_at
+                "Given start date (%s) is out of the boundary, the "
+                "valid boundary is between %s and %s (inclusively)."
+                % (start_at, min_start, max_end)
             )
 
         end_at = end_at or max_end
         branch = self.klass(data=data, start_at=start_at, end_at=end_at)
 
-        if not branch.span:
+        if (not branch.span) or (zero > branch.span):
             raise ValueError("%s spans nothing." % branch)
 
         for item in items:

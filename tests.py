@@ -148,6 +148,13 @@ class TestCollection(unittest.TestCase):
                 data={"key": "venus"},
             )
 
+        with self.assertRaisesRegex(ValueError, r".spans nothing"):
+            collection.branch(
+                start_at=self.start,
+                end_at=self.start - datetime.timedelta(days=1),
+                data={"key": "venus"},
+            )
+
     def test_collection_branch_span_date_out_of_bound(self):
         collection = Collection.init(
             start_at=self.start, end_at=self.end, data={"key": "world"}
@@ -156,6 +163,12 @@ class TestCollection(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, r".out of the boundary"):
             collection.branch(
                 start_at=self.end + datetime.timedelta(days=52),
+                data={"key": "venus"},
+            )
+
+        with self.assertRaisesRegex(ValueError, r".out of the boundary"):
+            collection.branch(
+                start_at=self.start - datetime.timedelta(days=52),
                 data={"key": "venus"},
             )
 

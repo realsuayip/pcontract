@@ -52,7 +52,7 @@ class Branch:
         self.start_at, self.end_at = validate_tz(self.start_at, self.end_at)
         self.created_at: datetime = now
         self.updated_at: datetime = now
-        self.replaced_by: list[Branch] = []
+        self.replaced_by: list[str] = []
 
         self.uuid: str = uuid.uuid4().hex
         self.data: dict = data or {}
@@ -95,6 +95,7 @@ class Collection:
         self.klass: Type[Branch] = klass
         self.uuid: str = uuid.uuid4().hex
         self.meta: dict = meta or {}
+        self.created_at = datetime.now(tz=utc)
 
     def __repr__(self) -> str:
         return "<%s %s>" % (self.__class__.__name__, repr(self.items))
@@ -108,12 +109,14 @@ class Collection:
     @classmethod
     def init(
         cls,
+        *,
         start_at: datetime | None,
         end_at: datetime,
         data: dict,
+        meta: dict | None = None,
     ) -> Collection:
         initial_branch = Branch(start_at=start_at, end_at=end_at, data=data)
-        return cls(items=[initial_branch])
+        return cls(items=[initial_branch], meta=meta)
 
     def branch(
         self,

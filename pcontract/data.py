@@ -68,7 +68,7 @@ class Branch:
                 self.end_at,
                 self.span,
                 self.data,
-                [item.uuid[-8:] for item in self.replaced_by],
+                [uid[-8:] for uid in self.replaced_by],
             )
         )
 
@@ -185,7 +185,7 @@ class Collection:
             self.items.append(new)
 
         if replace:
-            old.replaced_by.append(new)
+            old.replaced_by.append(new.uuid)
 
     def contains(self, branch: Branch) -> bool:
         for item in self.items:

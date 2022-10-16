@@ -62,8 +62,8 @@ class TestCollection(unittest.TestCase):
         initial_branch, left_branch, main_branch = collection
         self.assertEqual(3, len(collection))
 
-        self.assertIn(left_branch, initial_branch.replaced_by)
-        self.assertIn(main_branch, initial_branch.replaced_by)
+        self.assertIn(left_branch.uuid, initial_branch.replaced_by)
+        self.assertIn(main_branch.uuid, initial_branch.replaced_by)
 
         self.assertEqual([], left_branch.replaced_by)
         self.assertEqual([], main_branch.replaced_by)
@@ -118,9 +118,9 @@ class TestCollection(unittest.TestCase):
         initial_branch, left_branch, main_branch, right_branch = collection
         self.assertEqual(4, len(collection))
 
-        self.assertIn(left_branch, initial_branch.replaced_by)
-        self.assertIn(main_branch, initial_branch.replaced_by)
-        self.assertIn(right_branch, initial_branch.replaced_by)
+        self.assertIn(left_branch.uuid, initial_branch.replaced_by)
+        self.assertIn(main_branch.uuid, initial_branch.replaced_by)
+        self.assertIn(right_branch.uuid, initial_branch.replaced_by)
 
         self.assertEqual([], left_branch.replaced_by)
         self.assertEqual([], main_branch.replaced_by)

@@ -9,7 +9,6 @@ from typing import Type, cast
 __version__ = "0.1.0"
 __all__ = ["Branch", "Collection"]
 
-
 zero = timedelta()
 utc = zoneinfo.ZoneInfo("UTC")
 
@@ -46,7 +45,7 @@ class Branch:
         start_at: datetime | None = None,
         end_at: datetime | None = None,
     ) -> None:
-        now: datetime = datetime.now(tz=zoneinfo.ZoneInfo("UTC"))
+        now: datetime = datetime.now(tz=utc)
         self.start_at: datetime = start_at or now
         self.end_at: datetime | None = end_at
 
@@ -89,11 +88,13 @@ class Collection:
         self,
         *,
         items: list[Branch],
+        meta: dict | None = None,
         klass: Type[Branch] = Branch,
     ) -> None:
         self.items: list[Branch] = items
         self.klass: Type[Branch] = klass
         self.uuid: str = uuid.uuid4().hex
+        self.meta: dict = meta or {}
 
     def __repr__(self) -> str:
         return "<%s %s>" % (self.__class__.__name__, repr(self.items))

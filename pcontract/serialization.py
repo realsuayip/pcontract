@@ -65,7 +65,7 @@ def object_hook(obj: dict) -> dict | Branch | Collection:
 
 
 def to_json(collection: Collection) -> str:
-    encoder = Encoder(indent=4)
+    encoder = Encoder()
     return encoder.encode(collection)
 
 

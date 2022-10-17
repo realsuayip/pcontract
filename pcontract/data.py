@@ -232,7 +232,7 @@ class Collection:
             b
             for b in self.items
             if not b.replaced_by
-            and b.start_at <= at <= cast(datetime, b.end_at)
+            and b.start_at <= at < cast(datetime, b.end_at)
         ]
 
         if not candidates:

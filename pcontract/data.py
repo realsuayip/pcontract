@@ -226,6 +226,21 @@ class Collection:
 
         print("span=%s,count=%s" % (span, len(self.items)))
 
+    def get_branch(self, *, at: datetime) -> Branch | None:
+        at, _ = validate_tz(at)
+        candidates = [
+            b
+            for b in self.items
+            if not b.replaced_by
+            and b.start_at <= at <= cast(datetime, b.end_at)
+        ]
+
+        if not candidates:
+            return None
+
+        (branch,) = candidates
+        return branch
+
     def gantt(self):
         import matplotlib.dates
         import matplotlib.pyplot as plt

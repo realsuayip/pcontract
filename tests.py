@@ -73,10 +73,10 @@ class TestCollection(unittest.TestCase):
         self.assertEqual(datetime.timedelta(days=365 - 45), main_branch.span)
 
         self.assertEqual({"key": "world"}, initial_branch.data)
-        self.assertEqual({"key": "world"}, left_branch.data)
+        self.assertEqual({"_ref": initial_branch.uuid}, left_branch.data)
         self.assertEqual({"key": "venus"}, main_branch.data)
 
-    def collection_branch_right(self):
+    def test_collection_branch_right(self):
         collection = Collection.init(
             start_at=self.start,
             end_at=self.end,
@@ -90,19 +90,19 @@ class TestCollection(unittest.TestCase):
         initial_branch, main_branch, right_branch = collection
         self.assertEqual(3, len(collection))
 
-        self.assertIn(right_branch, initial_branch.replaced_by)
-        self.assertIn(main_branch, initial_branch.replaced_by)
+        self.assertIn(right_branch.uuid, initial_branch.replaced_by)
+        self.assertIn(main_branch.uuid, initial_branch.replaced_by)
 
         self.assertEqual([], right_branch.replaced_by)
         self.assertEqual([], main_branch.replaced_by)
 
         self.assertEqual(datetime.timedelta(days=365), initial_branch.span)
-        self.assertEqual(datetime.timedelta(days=45), right_branch.span)
-        self.assertEqual(datetime.timedelta(days=365 - 45), main_branch.span)
+        self.assertEqual(datetime.timedelta(days=45), main_branch.span)
+        self.assertEqual(datetime.timedelta(days=365 - 45), right_branch.span)
 
         self.assertEqual({"key": "world"}, initial_branch.data)
-        self.assertEqual({"key": "venus"}, right_branch.data)
         self.assertEqual({"key": "venus"}, main_branch.data)
+        self.assertEqual({"_ref": initial_branch.uuid}, right_branch.data)
 
     def test_collection_branch_left_right(self):
         collection = Collection.init(
@@ -132,9 +132,9 @@ class TestCollection(unittest.TestCase):
         self.assertEqual(datetime.timedelta(days=365 - 45), right_branch.span)
 
         self.assertEqual({"key": "world"}, initial_branch.data)
-        self.assertEqual({"key": "world"}, left_branch.data)
+        self.assertEqual({"_ref": initial_branch.uuid}, left_branch.data)
         self.assertEqual({"key": "venus"}, main_branch.data)
-        self.assertEqual({"key": "world"}, right_branch.data)
+        self.assertEqual({"_ref": initial_branch.uuid}, right_branch.data)
 
     def test_collection_branch_spans_nothing(self):
         collection = Collection.init(
@@ -191,3 +191,39 @@ class TestCollection(unittest.TestCase):
         self.assertEqual(datetime.timedelta(days=1), l1.span)
         self.assertEqual(datetime.timedelta(days=362), m2.span)
         self.assertEqual(datetime.timedelta(days=2), l2.span)
+
+    def test_dataref(self):
+        collection = Collection.init(
+            start_at=self.start,
+            end_at=self.end,
+            data={"key": "world"},
+        )
+        collection.branch(
+            start_at=self.start + datetime.timedelta(days=30),
+            end_at=self.start + datetime.timedelta(days=60),
+            data={"key": "venus"},
+        )
+        collection.branch(
+            start_at=self.start + datetime.timedelta(days=35),
+            end_at=self.start + datetime.timedelta(days=40),
+            data={"key": "jupiter"},
+        )
+        collection.branch(
+            start_at=self.start + datetime.timedelta(days=60),
+            data={"key": "mars"},
+        )
+
+        # collection.gantt()
+        m0, l1, m1, r1, l2, m2, r2, m3 = collection
+
+        self.assertEqual({"key": "world"}, m0.data)
+
+        self.assertEqual({"_ref": m0.uuid}, l1.data)
+        self.assertEqual({"key": "venus"}, m1.data)
+        self.assertEqual({"_ref": m0.uuid}, r1.data)
+
+        self.assertEqual({"_ref": m1.uuid}, l2.data)
+        self.assertEqual({"key": "jupiter"}, m2.data)
+        self.assertEqual({"_ref": m1.uuid}, r2.data)
+
+        self.assertEqual({"key": "mars"}, m3.data)

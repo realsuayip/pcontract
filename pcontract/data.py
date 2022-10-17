@@ -163,20 +163,27 @@ class Collection:
 
             ldelta = max(zero, start_at - item.start_at)
             rdelta = max(zero, item.end_at - end_at)
+            dataref = None
 
             if ldelta and ldelta != item.span:
+                dataref = self._resolve_data_ref(item)
                 left = self.klass(
                     start_at=item.start_at,
                     end_at=item.start_at + ldelta,
-                    data=item.data,
+                    data=dataref,
                 )
                 self._shift(item, left)
 
             self._shift(item, branch, replace=not is_extension)
 
             if rdelta:
+                if dataref is None:
+                    dataref = self._resolve_data_ref(item)
+
                 right = self.klass(
-                    start_at=end_at, end_at=item.end_at, data=item.data
+                    start_at=end_at,
+                    end_at=item.end_at,
+                    data=dataref,
                 )
                 self._shift(item, right)
         return branch
@@ -190,6 +197,13 @@ class Collection:
         if replace:
             old.replaced_by.append(new.uuid)
 
+    def _resolve_data_ref(self, item: Branch):
+        if "_ref" in item.data:
+            ref = item.data["_ref"]
+            branch = next(b for b in self.items if b.uuid == ref)
+            return self._resolve_data_ref(branch)
+        return {"_ref": item.uuid}
+
     def contains(self, branch: Branch) -> bool:
         for item in self.items:
             if item.uuid == branch.uuid:
@@ -198,16 +212,15 @@ class Collection:
 
     def explain(self) -> None:
         span = timedelta()
-        items = sorted(self.items, key=lambda k: k.start_at)
 
         print("\tAll branches:")
-        for item in items:
+        for item in self.items:
             if not item.replaced_by:
                 span += item.span
             print(item)
 
         print("\tActive branches:")
-        for aitem in items:
+        for aitem in self.items:
             if not aitem.replaced_by:
                 print(aitem)
 

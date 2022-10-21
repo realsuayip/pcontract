@@ -1,4 +1,5 @@
 import pickle
+import typing
 from pathlib import Path
 from typing import TypeVar
 
@@ -8,13 +9,13 @@ T = TypeVar("T", bound="FileBackend")
 
 
 class FileBackend:
-    def __init__(self, filename: str | Path = None) -> None:
+    def __init__(self, filename: str | Path | None = None) -> None:
         if isinstance(filename, str):
             filename = Path(filename)
 
-        self._filename = filename
-        self._file = None
-        self._contract = None
+        self._filename: str | Path | None = filename
+        self._file: typing.BinaryIO | None = None
+        self._contract: Contract | None = None
 
     def init(self, *args, **kwargs) -> None:
         if self._contract:
@@ -22,17 +23,18 @@ class FileBackend:
 
         self._contract = Contract.init(*args, **kwargs)
         self._filename = self._contract.uuid
-        self._dump()
 
     def branch(self, *args, **kwargs) -> None:
+        assert self._contract
         self._contract.branch(*args, **kwargs)
-        self._dump()
 
-    def explain(self):
-        return self._contract.explain()
+    def explain(self) -> None:
+        assert self._contract
+        self._contract.explain()
 
-    def gantt(self):
-        return self._contract.gantt()
+    def gantt(self) -> None:
+        assert self._contract
+        self._contract.gantt()
 
     def __enter__(self: T) -> T:
         if self._filename is not None:
@@ -40,15 +42,16 @@ class FileBackend:
                 self._contract = pickle.load(f)
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         if self._file is not None:
             self._file.close()
 
-    def _dump(self):
+    def commit(self) -> None:
         if self._file is None:
+            assert self._filename
             self._file = open(self._filename, "wb")
         pickle.dump(self._contract, self._file)
 
 
-def file(filename: str | Path = None) -> FileBackend:
+def file(filename: str | Path | None = None) -> FileBackend:
     return FileBackend(filename)

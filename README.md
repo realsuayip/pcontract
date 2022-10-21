@@ -35,11 +35,11 @@ the original contract).
 
 ## How it works
 
-In order to create a contract, you need to use a `Collection` type, which is a
+In order to create a contract, you need to use a `Contract` type, which is a
 container for `Branch` i.e, contracts. You may initialize a basic contract by:
 
 ```python
-collection = Collection.init(
+contract = Contract.init(
     start_at=datetime(2022, 12, 1),
     end_at=datetime(2023, 12, 1),
     data={"hello": "world"},
@@ -47,17 +47,17 @@ collection = Collection.init(
 ```
 
 The example above creates a contract that spans one year, with given data. In
-order to amend a contract, you may use `Collection.branch`:
+order to amend a contract, you may use `Contract.branch`:
 
 ```
-collection.branch(
+contract.branch(
     start_at=datetime(2023, 6, 1),
     data={"hello": "moon"}
 )
 ```
 
 This change will create additional branches that describe the data over time.
-You may see the branch information by using the `Collection.explain` method.
+You may see the branch information by using the `Contract.explain` method.
 The example above will create a total of three contracts:
 
 - One for the original contract (spanning 1 year).
@@ -75,7 +75,7 @@ eggs, obviously). Jack and Janet make a contract in which Jack agrees to provide
 Janet 10 eggs every day, for one year.
 
 ```python
-collection = Collection.init(
+contract = Contract.init(
     start_at=datetime(2022, 12, 1),
     end_at=datetime(2023, 12, 1),
     data={"eggs_per_day": 10},
@@ -88,7 +88,7 @@ instead of the usual 10. So a new agreement is made in which Janet would receive
 20 eggs a day during the easter period:
 
 ```python
-collection.branch(
+contract.branch(
     start_at=datetime(2023, 4, 1),
     end_at=datetime(2023, 5, 1),
     data={"eggs_per_day": 20},
@@ -100,13 +100,13 @@ delicious cakes she sold during the easter period. So she makes a new agreement
 with Jack in which the number of eggs per day is increased to 15:
 
 ```python
-collection.branch(
+contract.branch(
     start_at=datetime(2023, 5, 16),
     data={"eggs_per_day": 15},
 )
 ```
 
-Now let's look at what happened, output from `collection.gantt()`:
+Now let's look at what happened, output from `contract.gantt()`:
 
 ![Gannt chart](docs/example.png)
 

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from typing import Type, cast
 
 __version__ = "0.1.0"
-__all__ = ["Branch", "Collection"]
+__all__ = ["Branch", "Contract"]
 
 zero = timedelta()
 utc = zoneinfo.ZoneInfo("UTC")
@@ -83,7 +83,7 @@ class Branch:
         return self.end_at - self.start_at
 
 
-class Collection:
+class Contract:
     def __init__(
         self,
         *,
@@ -114,7 +114,7 @@ class Collection:
         end_at: datetime,
         data: dict,
         meta: dict | None = None,
-    ) -> Collection:
+    ) -> Contract:
         initial_branch = Branch(start_at=start_at, end_at=end_at, data=data)
         return cls(items=[initial_branch], meta=meta)
 

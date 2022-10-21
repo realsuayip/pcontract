@@ -2,10 +2,10 @@ import datetime
 from json import JSONDecoder, JSONEncoder
 from typing import Any
 
-from pcontract.data import Branch, Collection
+from pcontract.data import Branch, Contract
 
 BRANCH_TYPE = "pcontract.branch"
-COLLECTION_TYPE = "pcontract.collection"
+CONTRACT_TYPE = "pcontract.contract"
 
 
 class Encoder(JSONEncoder):
@@ -16,8 +16,8 @@ class Encoder(JSONEncoder):
         if isinstance(o, Branch):
             return self.decode_branch(o)
 
-        if isinstance(o, Collection):
-            return self.decode_collection(o)
+        if isinstance(o, Contract):
+            return self.decode_contract(o)
 
     def decode_branch(self, branch: Branch) -> dict:  # noqa
         return {
@@ -30,17 +30,17 @@ class Encoder(JSONEncoder):
             "data": branch.data,
         }
 
-    def decode_collection(self, collection: Collection) -> dict:  # noqa
+    def decode_contract(self, contract: Contract) -> dict:  # noqa
         return {
-            "type": COLLECTION_TYPE,
-            "uuid": collection.uuid,
-            "created_at": collection.created_at,
-            "meta": collection.meta,
-            "items": collection.items,
+            "type": CONTRACT_TYPE,
+            "uuid": contract.uuid,
+            "created_at": contract.created_at,
+            "meta": contract.meta,
+            "items": contract.items,
         }
 
 
-def object_hook(obj: dict) -> dict | Branch | Collection:
+def object_hook(obj: dict) -> dict | Branch | Contract:
     kind = obj.get("type")
     isodate = datetime.datetime.fromisoformat
 
@@ -55,20 +55,20 @@ def object_hook(obj: dict) -> dict | Branch | Collection:
         branch.replaced_by = obj["replaced_by"]
         return branch
 
-    if kind == COLLECTION_TYPE:
-        collection = Collection(items=obj["items"], meta=obj["meta"])
-        collection.uuid = obj["uuid"]
-        collection.created_at = isodate(obj["created_at"])
-        return collection
+    if kind == CONTRACT_TYPE:
+        contract = Contract(items=obj["items"], meta=obj["meta"])
+        contract.uuid = obj["uuid"]
+        contract.created_at = isodate(obj["created_at"])
+        return contract
 
     return obj
 
 
-def to_json(collection: Collection) -> str:
+def to_json(contract: Contract) -> str:
     encoder = Encoder()
-    return encoder.encode(collection)
+    return encoder.encode(contract)
 
 
-def from_json(s: str) -> Collection:
+def from_json(s: str) -> Contract:
     decoder = JSONDecoder(object_hook=object_hook)
     return decoder.decode(s)

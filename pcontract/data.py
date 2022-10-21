@@ -4,7 +4,7 @@ import uuid
 import warnings
 import zoneinfo
 from datetime import datetime, timedelta
-from typing import Type, cast
+from typing import Any, Type, cast
 
 __version__ = "0.1.0"
 __all__ = ["Branch", "Contract"]
@@ -41,7 +41,7 @@ class Branch:
     def __init__(
         self,
         *,
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         start_at: datetime | None = None,
         end_at: datetime | None = None,
     ) -> None:
@@ -55,9 +55,9 @@ class Branch:
         self.replaced_by: list[str] = []
 
         self.uuid: str = uuid.uuid4().hex
-        self.data: dict = data or {}
+        self.data: dict[str, Any] = data or {}
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             "<%s %s start_at=%-26s end_at=%-26s span=%-26s data=%s"
             " replaced_by=%s>"
@@ -72,7 +72,7 @@ class Branch:
             )
         )
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Branch):
             return NotImplemented
         return self.uuid == other.uuid
@@ -88,13 +88,13 @@ class Contract:
         self,
         *,
         items: list[Branch],
-        meta: dict | None = None,
+        meta: dict[str, Any] | None = None,
         klass: Type[Branch] = Branch,
     ) -> None:
         self.items: list[Branch] = items
         self.klass: Type[Branch] = klass
         self.uuid: str = uuid.uuid4().hex
-        self.meta: dict = meta or {}
+        self.meta: dict[str, Any] = meta or {}
         self.created_at = datetime.now(tz=utc)
 
     def __repr__(self) -> str:
@@ -112,15 +112,15 @@ class Contract:
         *,
         start_at: datetime | None,
         end_at: datetime,
-        data: dict,
-        meta: dict | None = None,
+        data: dict[str, Any],
+        meta: dict[str, Any] | None = None,
     ) -> Contract:
         initial_branch = Branch(start_at=start_at, end_at=end_at, data=data)
         return cls(items=[initial_branch], meta=meta)
 
     def branch(
         self,
-        data: dict,
+        data: dict[str, Any],
         *,
         start_at: datetime,
         end_at: datetime | None = None,
@@ -131,9 +131,7 @@ class Contract:
         ]
 
         max_end: datetime = max(cast(datetime, item.end_at) for item in items)
-        min_start: datetime = min(
-            cast(datetime, item.start_at) for item in items
-        )
+        min_start: datetime = min(item.start_at for item in items)
 
         if (start_at > max_end) or (start_at < min_start):
             raise ValueError(
@@ -197,7 +195,7 @@ class Contract:
         if replace:
             old.replaced_by.append(new.uuid)
 
-    def _resolve_data_ref(self, item: Branch):
+    def _resolve_data_ref(self, item: Branch) -> dict[str, Any]:
         if "_ref" in item.data:
             ref = item.data["_ref"]
             branch = next(b for b in self.items if b.uuid == ref)
@@ -241,7 +239,7 @@ class Contract:
         (branch,) = candidates
         return branch
 
-    def gantt(self):
+    def gantt(self) -> None:
         import matplotlib.dates
         import matplotlib.pyplot as plt
         import pandas as pd

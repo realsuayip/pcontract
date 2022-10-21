@@ -19,7 +19,7 @@ class Encoder(JSONEncoder):
         if isinstance(o, Contract):
             return self.decode_contract(o)
 
-    def decode_branch(self, branch: Branch) -> dict:  # noqa
+    def decode_branch(self, branch: Branch) -> dict[str, Any]:  # noqa
         return {
             "type": BRANCH_TYPE,
             "uuid": branch.uuid,
@@ -30,7 +30,7 @@ class Encoder(JSONEncoder):
             "data": branch.data,
         }
 
-    def decode_contract(self, contract: Contract) -> dict:  # noqa
+    def decode_contract(self, contract: Contract) -> dict[str, Any]:  # noqa
         return {
             "type": CONTRACT_TYPE,
             "uuid": contract.uuid,
@@ -40,7 +40,7 @@ class Encoder(JSONEncoder):
         }
 
 
-def object_hook(obj: dict) -> dict | Branch | Contract:
+def object_hook(obj: dict[Any, Any]) -> dict[Any, Any] | Branch | Contract:
     kind = obj.get("type")
     isodate = datetime.datetime.fromisoformat
 
@@ -69,6 +69,6 @@ def to_json(contract: Contract) -> str:
     return encoder.encode(contract)
 
 
-def from_json(s: str) -> Contract:
+def from_json(s: str) -> Any:
     decoder = JSONDecoder(object_hook=object_hook)
     return decoder.decode(s)

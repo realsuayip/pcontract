@@ -1,49 +1,30 @@
 import pickle
-import typing
 from pathlib import Path
 from typing import Literal, TypeVar
 
+from pcontract.backends.base import Backend
 from pcontract.serialization import from_json, to_json
-
-if typing.TYPE_CHECKING:
-    from pcontract.data import Contract
 
 T = TypeVar("T", bound="FileBackend")
 
 
-class FileBackend:
+class FileBackend(Backend):
     def __init__(
         self,
         filename: str | Path | None = None,
         method: Literal["json", "pickle"] = "json",
     ) -> None:
+        super().__init__()
+
         if isinstance(filename, str):
             filename = Path(filename)
 
         self._filename: str | Path | None = filename
         self._method = method
-        self._contract: Contract | None = None
 
     def init(self, *args, **kwargs) -> None:
-        if self._contract:
-            raise ValueError("The contract is already initialized.")
-
-        from pcontract.data import Contract
-
-        self._contract = Contract.init(*args, **kwargs)
+        super().init(*args, **kwargs)
         self._filename = self._contract.uuid
-
-    def branch(self, *args, **kwargs) -> None:
-        assert self._contract
-        self._contract.branch(*args, **kwargs)
-
-    def explain(self) -> None:
-        assert self._contract
-        self._contract.explain()
-
-    def gantt(self) -> None:
-        assert self._contract
-        self._contract.gantt()
 
     def __enter__(self: T) -> T:
         if self._filename is not None:

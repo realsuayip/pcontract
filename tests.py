@@ -226,3 +226,18 @@ class TestContract(unittest.TestCase):
         self.assertEqual({"_ref": m1.uuid}, r2.data)
 
         self.assertEqual({"key": "mars"}, m3.data)
+
+    def test_contract_init_spans_nothing(self):
+        with self.assertRaisesRegex(ValueError, r".spans nothing"):
+            Contract.init(
+                start_at=self.start,
+                end_at=self.start,
+                data={"key": "venus"},
+            )
+
+        with self.assertRaisesRegex(ValueError, r".spans nothing"):
+            Contract.init(
+                start_at=self.start,
+                end_at=self.start - datetime.timedelta(days=1),
+                data={"key": "venus"},
+            )

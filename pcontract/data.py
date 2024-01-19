@@ -117,6 +117,8 @@ class Contract:
         meta: dict[str, Any] | None = None,
     ) -> Contract:
         initial_branch = Branch(start_at=start_at, end_at=end_at, data=data)
+        if (not initial_branch.span) or (zero > initial_branch.span):
+            raise ValueError("%s spans nothing." % initial_branch)
         return cls(items=[initial_branch], meta=meta)
 
     def branch(

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typing
 import uuid
 import warnings
 import zoneinfo
@@ -234,6 +235,7 @@ class Contract:
         (branch,) = candidates
         return branch
 
+    @typing.no_type_check
     def gantt(self) -> None:
         import matplotlib.dates
         import matplotlib.pyplot as plt

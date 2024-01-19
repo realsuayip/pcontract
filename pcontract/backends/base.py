@@ -1,14 +1,14 @@
-import typing
+from typing import Any, TYPE_CHECKING
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from pcontract.data import Contract
 
 
 class Backend:
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._contract: Contract | None = None
 
-    def init(self, *args, **kwargs) -> None:
+    def init(self, *args: Any, **kwargs: Any) -> None:
         if self._contract is not None:
             raise ValueError(
                 "You are already working on an initialized contract (%s)."
@@ -19,7 +19,7 @@ class Backend:
 
         self._contract = Contract.init(*args, **kwargs)
 
-    def branch(self, *args, **kwargs) -> None:
+    def branch(self, *args: Any, **kwargs: Any) -> None:
         assert self._contract
         self._contract.branch(*args, **kwargs)
 

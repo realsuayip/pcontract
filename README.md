@@ -108,7 +108,7 @@ contract.branch(
 
 Now let's look at what happened, output from `contract.gantt()`:
 
-![Gannt chart](docs/example.png)
+![Gannt chart](assets/example.png)
 
 In the example above, each line represents a contract (hence a `Branch`instance)
 you can track how the date changes by following blue lines. Red lines indicate

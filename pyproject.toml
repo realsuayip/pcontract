@@ -21,11 +21,19 @@ requires-python = ">=3.10"
 "Homepage" = "https://github.com/realsuayip/pcontract"
 "Bug Tracker" = "https://github.com/realsuayip/pcontract/issues"
 
-[tool.black]
-line-length = 79
+[tool.ruff]
+target-version = "py310"
+line-length = 88
 
-[tool.isort]
-profile = "black"
-sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
-combine_as_imports=true
-line_length = 79
+[tool.ruff.isort]
+combine-as-imports = true
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.mypy]
+strict = true

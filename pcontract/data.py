@@ -126,9 +126,7 @@ class Contract:
         end_at: datetime | None = None,
     ) -> Branch:
         start_at, end_at = validate_tz(start_at, end_at)
-        items: list[Branch] = [
-            item for item in self.items if not item.replaced_by
-        ]
+        items: list[Branch] = [item for item in self.items if not item.replaced_by]
 
         max_end: datetime = max(cast(datetime, item.end_at) for item in items)
         min_start: datetime = min(item.start_at for item in items)
@@ -186,9 +184,7 @@ class Contract:
                 self._shift(item, right)
         return branch
 
-    def _shift(
-        self, old: Branch, new: Branch, /, *, replace: bool = True
-    ) -> None:
+    def _shift(self, old: Branch, new: Branch, /, *, replace: bool = True) -> None:
         if not self.contains(new):
             self.items.append(new)
 
@@ -229,8 +225,7 @@ class Contract:
         candidates = [
             b
             for b in self.items
-            if not b.replaced_by
-            and b.start_at <= at < cast(datetime, b.end_at)
+            if not b.replaced_by and b.start_at <= at < cast(datetime, b.end_at)
         ]
 
         if not candidates:
@@ -261,9 +256,7 @@ class Contract:
         fig, ax = plt.subplots(1, figsize=(16, 16), dpi=80)
         ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator(interval=1))
         ax.xaxis.set_major_locator(matplotlib.dates.DayLocator(interval=30))
-        ax.xaxis.set_major_formatter(
-            matplotlib.dates.DateFormatter("%Y-%m-%d")
-        )
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
         plt.xticks(rotation=90)
         plt.hlines(
             df.uuid,

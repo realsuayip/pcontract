@@ -15,9 +15,7 @@ class MongoBackend(Backend):
         if uuid is None:
             self._contract = None
         else:
-            collection = self.collection.find_one(
-                {"uuid": uuid}, {"_id": False}
-            )
+            collection = self.collection.find_one({"uuid": uuid}, {"_id": False})
             collection = json.dumps(collection)
             self._contract = from_json(collection)
 

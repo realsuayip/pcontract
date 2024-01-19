@@ -1,6 +1,7 @@
 dist
 build
 venv
+.venv
 *.egg-info/
 
 .mypy_cache

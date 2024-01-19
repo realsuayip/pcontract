@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pcontract"
-version = "0.1.0"
+version = "1.0.0"
 description = "A data structure to track data over time."
 readme = "README.md"
 authors = [{ name = "suayip uzulmez", email = "suayip.541@gmail.com" }]

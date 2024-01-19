@@ -7,7 +7,7 @@ import zoneinfo
 from datetime import datetime, timedelta
 from typing import Any, Type, cast
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __all__ = ["Branch", "Contract"]
 
 zero = timedelta()

@@ -111,7 +111,7 @@ class Contract:
     def init(
         cls,
         *,
-        start_at: datetime | None,
+        start_at: datetime | None = None,
         end_at: datetime,
         data: dict[str, Any],
         meta: dict[str, Any] | None = None,

@@ -241,3 +241,14 @@ class TestContract(unittest.TestCase):
                 end_at=self.start - datetime.timedelta(days=1),
                 data={"key": "venus"},
             )
+
+    def test_contract_init_without_start_date(self):
+        delta = datetime.timedelta(hours=1)
+        contract = Contract.init(data={}, end_at=datetime.datetime.now(tz=utc) + delta)
+        (branch,) = contract.items
+        # get away from adding freezegun
+        self.assertAlmostEqual(
+            delta.total_seconds(),
+            branch.span.total_seconds(),
+            places=5,
+        )

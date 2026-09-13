@@ -1,7 +1,7 @@
 import pickle
 from pathlib import Path
 from types import TracebackType
-from typing import Literal, TypeVar, Any
+from typing import Any, Literal, Self, TypeVar
 
 from pcontract.backends.base import Backend
 from pcontract.serialization import from_json, to_json
@@ -28,7 +28,7 @@ class FileBackend(Backend):
         assert self._contract is not None
         self._filename = self._contract.uuid
 
-    def __enter__(self: T) -> T:
+    def __enter__(self) -> Self:
         if self._filename is not None:
             if self._method == "json":
                 with open(self._filename, "r") as f:
@@ -40,7 +40,7 @@ class FileBackend(Backend):
 
     def __exit__(
         self,
-        exctype: type[BaseException],
+        exctype: type[BaseException] | None,
         excinst: BaseException | None,
         exctb: TracebackType | None,
     ) -> None:

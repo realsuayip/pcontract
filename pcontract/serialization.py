@@ -19,7 +19,7 @@ class Encoder(JSONEncoder):
         if isinstance(o, Contract):
             return self.decode_contract(o)
 
-    def decode_branch(self, branch: Branch) -> dict[str, Any]:  # noqa
+    def decode_branch(self, branch: Branch) -> dict[str, Any]:
         return {
             "type": BRANCH_TYPE,
             "uuid": branch.uuid,
@@ -30,7 +30,7 @@ class Encoder(JSONEncoder):
             "data": branch.data,
         }
 
-    def decode_contract(self, contract: Contract) -> dict[str, Any]:  # noqa
+    def decode_contract(self, contract: Contract) -> dict[str, Any]:
         return {
             "type": CONTRACT_TYPE,
             "uuid": contract.uuid,

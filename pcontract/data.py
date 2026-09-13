@@ -5,7 +5,7 @@ import uuid
 import warnings
 import zoneinfo
 from datetime import datetime, timedelta
-from typing import Any, Type, cast
+from typing import Any, cast
 
 __version__ = "1.0.0"
 __all__ = ["Branch", "Contract"]
@@ -73,7 +73,7 @@ class Branch:
             )
         )
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Branch):
             return NotImplemented
         return self.uuid == other.uuid
@@ -90,10 +90,10 @@ class Contract:
         *,
         items: list[Branch],
         meta: dict[str, Any] | None = None,
-        klass: Type[Branch] = Branch,
+        klass: type[Branch] = Branch,
     ) -> None:
         self.items: list[Branch] = items
-        self.klass: Type[Branch] = klass
+        self.klass: type[Branch] = klass
         self.uuid: str = uuid.uuid4().hex
         self.meta: dict[str, Any] = meta or {}
         self.created_at = datetime.now(tz=utc)
@@ -257,7 +257,7 @@ class Contract:
         ]
         df = pd.DataFrame.from_records(df_list)
 
-        fig, ax = plt.subplots(1, figsize=(16, 16), dpi=80)
+        _, ax = plt.subplots(1, figsize=(16, 16), dpi=80)
         ax.xaxis.set_minor_locator(matplotlib.dates.DayLocator(interval=1))
         ax.xaxis.set_major_locator(matplotlib.dates.DayLocator(interval=30))
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))

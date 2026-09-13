@@ -185,7 +185,7 @@ class TestContract(unittest.TestCase):
             data={"key": "venus"},
         )
 
-        i, l1, m1, l2, m2 = contract
+        _, l1, m1, l2, m2 = contract
         self.assertEqual(5, len(contract))
         self.assertEqual(datetime.timedelta(days=364), m1.span)
         self.assertEqual(datetime.timedelta(days=1), l1.span)

@@ -25,7 +25,7 @@ requires-python = ">=3.10"
 target-version = "py310"
 line-length = 88
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 section-order = [
     "future",
@@ -34,6 +34,9 @@ section-order = [
     "first-party",
     "local-folder",
 ]
+
+[tool.ruff.lint]
+ignore = ["UP031"]
 
 [tool.mypy]
 strict = true

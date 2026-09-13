@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build==0.12.*"]
+build-backend = "uv_build"
 
 [project]
 name = "pcontract"
-version = "1.0.0"
+version = "1.0.1"
 description = "A data structure to track data over time."
 readme = "README.md"
 authors = [{ name = "suayip uzulmez", email = "suayip.541@gmail.com" }]
